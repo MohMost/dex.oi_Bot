@@ -1,9 +1,8 @@
 import * as discord from "discord.js";
 import { config } from "dotenv";
 config();
-const rest = new discord.REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
-const CLIENT_ID = process.env.CLIENT_ID 
-const GUILD_ID = process.env.GUILD_ID
+const rest = new discord.REST({ version: "10" }).setToken(process.env.BOT_TOKEN2);
+const CLIENT_ID = process.env.CLIENT_ID2
 async function main() {
   const commands = [
     {
@@ -20,8 +19,8 @@ async function main() {
     }
   ]
   try{
-    console.log('Started refreshing application (/) commands ┃✅')
-    await rest.put(discord.Routes.applicationCommands(CLIENT_ID, GUILD_ID), {
+    console.log(' Started refreshing application (/) commands ┃✅')
+    await rest.put(discord.Routes.applicationCommands(CLIENT_ID), {
 
        body: commands 
 

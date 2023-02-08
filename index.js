@@ -3,12 +3,12 @@ import Canvas from "canvas";
 import * as discord from "discord.js";
 import { main } from "./commands/commandBuilder.js";
 import { typeMap } from "./data/icons.js";
-import { typeWS } from "./data/stren_weak.js";
+import { typeWS, typeWS2 } from "./data/stren_weak.js";
 import { InteractionResponseType } from "discord.js";
 
 config();
 
-const BOT_TOKEN = process.env.BOT_TOKEN;
+const BOT_TOKEN = process.env.BOT_TOKEN2;
 
 const client = new discord.Client({
   intents: [
@@ -22,7 +22,7 @@ const base2 = `https://pokeapi.co/api/v2/pokemon-species/`;
 
 function start() {
   client.login(BOT_TOKEN);
-  console.log(`DEX.IO is successfully logged ┃✅`)
+  console.log(` DEX.IO is successfully logged ┃✅`)
   
 }
 start();
@@ -71,9 +71,6 @@ client.on("interactionCreate", (interaction) => {
           type2 = "ㅤ";
           spacing = "ㅤㅤㅤㅤㅤㅤㅤㅤ";
         }
-        let arr = Array.from(pokemon2.flavor_text_entries[0].flavor_text)
-        arr.filter((letter)=> letter === "W").forEach(letter => console.log(letter))
-        console.log(arr)
         const typeData = typeMap[type.toLowerCase()] || {};
         iconID = typeData.iconID || "";
         color = typeData.color || "";
