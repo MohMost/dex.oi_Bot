@@ -8,7 +8,7 @@ import { InteractionResponseType } from "discord.js";
 
 config();
 
-const BOT_TOKEN = process.env.BOT_TOKEN2;
+const BOT_TOKEN = process.env.BOT_TOKEN;
 
 const client = new discord.Client({
   intents: [
@@ -19,6 +19,7 @@ const client = new discord.Client({
 });
 const base = `https://pokeapi.co/api/v2/pokemon/`;
 const base2 = `https://pokeapi.co/api/v2/pokemon-species/`;
+
 
 function start() {
   client.login(BOT_TOKEN);
@@ -152,6 +153,7 @@ client.on("interactionCreate", (interaction) => {
         .then((data) => {
           
           const type = data.types[0].type.name;
+          const type2 = data.types[1].type.name;
           const typeData = typeMap[type.toLowerCase()] || {};
           let color = typeData.color || "";
           let iconID = typeData.iconID || "";
@@ -161,7 +163,7 @@ client.on("interactionCreate", (interaction) => {
                 embeds: [
                   new discord.EmbedBuilder()
                     .setColor(color)
-                    .setTitle(`${title}'s stats`)
+                    .setThumbnail(data.sprites.front_default)
                     .setDescription("ㅤ")
                     .addFields(
                       {
@@ -201,28 +203,44 @@ client.on("interactionCreate", (interaction) => {
               break;
             case "evolutions":
               fetch(`https://pokeapi.co/api/v2/evolution-chain/${data.id}`)
-              .then(response => response.json()).then(data => {
-                interaction.reply({content: `${data.chain.species.name}`})
+              .then(response => response.json()).then(pokemon => {
+                interaction.reply({content: `${pokemon.chain.species.name}`})
               }).catch(err => console.log("evolustion",err));
               break;
             case "sw":
               let strengths;
               let weaknesses;
-
+              
               if (data.types.length === 2) {
-                let affinData = typeWS2[type.toLowerCase()] || {};
-                strengths = affinData.color || "";
-                weaknesses = affinData.color || "";
-              } else {
-                let affinData = typeWS[type.toLowerCase()] || {};
-                strengths = affinData.strength || "";
-                weaknesses = affinData.weakness || "";
+                let dualTypes
+                for (let key in typeWS2){
+                  if (key === `${type}/${type2}`){
+                    dualTypes = `${type}/${type2}`
+                  
+                  }else if (key ===`${type2}/${type}`) {
+                    let arr = Array.from(interaction.message.embeds[0].data.fields[0].value)
+                    let arr2 = arr.filter((letter , index)=> index > 32 && index< 38)
+                    let singleType = arr2.join("")
+                    dualTypes = `${type2}/${type}`
+                  }
+            
+                }
+                let affinData = typeWS2[dualTypes.toLowerCase()];
+                strengths = affinData.strength ;
+                weaknesses = affinData.weakness ;
+                
+          
+              } else if (data.types.length===1){
+                let affinData = typeWS[singleType];
+                strengths = affinData.strength;
+                weaknesses = affinData.weakness;
               }
+              
               
               interaction.reply({
                 content: `**${title} | ${data.generation} | strengths and weaknesses** ${interaction.user}`,
                 embeds: [
-                  new discord.EmbedBuilder().setColor(color).setFields(
+                  new discord.EmbedBuilder().setImage(data.sprites.front_default).setColor(color).setFields(
                     {
                       name: "ㅤ",
                       value: `<:grass2:1071586457174679643><:grass2:1071586457174679643><:grass2:1071586457174679643><:grass2:1071586457174679643><:grass2:1071586457174679643> **Strengths** <:grass2:1071586457174679643><:grass2:1071586457174679643><:grass2:1071586457174679643><:grass2:1071586457174679643><:grass2:1071586457174679643>\n\ㅤ`,
@@ -293,9 +311,7 @@ client.on("interactionCreate", (interaction) => {
           }
         })
         .catch((error) =>
-          console.log(
-            `OOPs!!⚠️ this is the error comming from fetching data in the buttons interaction ⚠️ : ${error}`
-          )
+          interaction.reply({content:` OOPs!!⚠️ this is the error comming from fetching data in the buttons interaction ⚠️ : ${error} ${typeMap.type2}`})
         );
     }
   } catch (e) {

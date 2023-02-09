@@ -1,5 +1,5 @@
 const choices = [
-  {
+    {
     name: "Bulbasaur",
     value: "bulbasaur",
     },
@@ -124,3 +124,5 @@ const choices = [
     value: "nidoqueen",
     },
 ]
+
+

@@ -1,8 +1,8 @@
 import * as discord from "discord.js";
 import { config } from "dotenv";
 config();
-const rest = new discord.REST({ version: "10" }).setToken(process.env.BOT_TOKEN2);
-const CLIENT_ID = process.env.CLIENT_ID2
+const rest = new discord.REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
+const CLIENT_ID = process.env.CLIENT_ID
 async function main() {
   const commands = [
     {
@@ -27,7 +27,7 @@ async function main() {
       });
   }catch(err){
     if(!err.message.includes('rest is not defined')){
-      console.log(`here is the error :${err}`)
+      console.log(`error in  :${err}`)
     }
     
   }
