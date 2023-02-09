@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon ./src/index.js"
+    "test": "nodemon ./src/index.js",
+    "all": " npm install && npm build"
   },
   "keywords": [],
   "author": "",
