@@ -1,5 +1,4 @@
 import { config } from "dotenv";
-import Canvas from "canvas";
 import * as discord from "discord.js";
 import { main } from "./commands/commandBuilder.js";
 import { typeMap } from "./data/icons.js";
